@@ -6,13 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import br.com.alura.agenda.database.converter.ConversorCalendar;
 import br.com.alura.agenda.database.dao.AlunoDAO;
 import br.com.alura.agenda.model.Aluno;
 
-@Database(entities = {Aluno.class}, version = 3, exportSchema = false)
+@Database(entities = {Aluno.class}, version = 4, exportSchema = false)
+@TypeConverters({ConversorCalendar.class})
 public abstract class AgendaDatabase extends RoomDatabase {
 
     private static final String NAME_DB = "agenda.db";
@@ -30,7 +33,7 @@ public abstract class AgendaDatabase extends RoomDatabase {
                     .addMigrations(new Migration(1, 2) {
                         @Override
                         public void migrate(@NonNull SupportSQLiteDatabase database) {
-                            database.execSQL("ALTER TABLE aluno ADD COLUMN sobrenome TEXT");
+                            database.execSQL("ALTER TABLE Aluno ADD COLUMN sobrenome TEXT");
                         }
                     }, new Migration(2, 3) {
                         @Override
@@ -43,6 +46,11 @@ public abstract class AgendaDatabase extends RoomDatabase {
                             database.execSQL("DROP TABLE Aluno");
                             // Renomeia a tabela nova
                             database.execSQL("ALTER TABLE Aluno_novo RENAME TO Aluno");
+                        }
+                    }, new Migration(3, 4) {
+                        @Override
+                        public void migrate(@NonNull SupportSQLiteDatabase database) {
+                            database.execSQL("ALTER TABLE Aluno ADD COLUMN momentoDeCadastro INTEGER");
                         }
                     })
                     .build();
