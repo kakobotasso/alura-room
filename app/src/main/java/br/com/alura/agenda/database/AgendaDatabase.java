@@ -28,7 +28,7 @@ public abstract class AgendaDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room
                     .databaseBuilder(context, AgendaDatabase.class, NAME_DB)
-                    .allowMainThreadQueries()
+                    //.allowMainThreadQueries()
                     // SÓ USAR ENQUANTO O APP NÃO ESTIVER EM PROD. DROPA TUDO E REFAZ O BANCO
                     //.fallbackToDestructiveMigration()
                     .addMigrations(AgendaMigrations.TODAS_MIGRATIONS)
